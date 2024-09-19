@@ -128,7 +128,7 @@ export const removeFromGroup = async (req: Request, res: Response) => {
   try {
     const { chatId, userId } = req.body;
 
-    // check if the requester is admin
+    // check if the requester is admin:TODO
 
     const removed = await Chat.findByIdAndUpdate(
       chatId,
