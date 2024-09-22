@@ -127,7 +127,7 @@ exports.renameGroup = renameGroup;
 const removeFromGroup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { chatId, userId } = req.body;
-        // check if the requester is admin
+        // check if the requester is admin:TODO
         const removed = yield chatModel_1.Chat.findByIdAndUpdate(chatId, {
             $pull: { users: userId },
         }, {

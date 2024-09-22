@@ -17,13 +17,14 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const connectToDB = () => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(process.env.MONGO_DB_URL);
     try {
         const connection = yield mongoose_1.default.connect(process.env.MONGO_DB_URL);
         console.log(`MongoDB Connected: ${connection.connection.host}`);
     }
     catch (error) {
         console.error(`Error: ${error}`);
-        process.exit(1); // Exit with a non-zero status code to indicate an error
+        process.exit(1);
     }
 });
 exports.connectToDB = connectToDB;

@@ -33,7 +33,8 @@ export const allUsers = async (req: userInterface, res: Response) => {
 };
 export const registerUser = async (req: Request, res: Response) => {
   try {
-    const { name, email, password, pic } = req.body;
+    const { name, email, password } = req.body;
+    console.log(name, email, password);
 
     if (!name || !email || !password) {
       res.status(400);
@@ -50,8 +51,7 @@ export const registerUser = async (req: Request, res: Response) => {
     const user = await User.create({
       name,
       email,
-      hashedPassword,
-      pic,
+      password: hashedPassword,
     });
 
     res
@@ -64,11 +64,11 @@ export const registerUser = async (req: Request, res: Response) => {
         name: user.name,
         email: user.email,
         isAdmin: user.isAdmin,
-        pic: user.pic,
         token: generateToken(user._id),
       });
   } catch (error) {
     res.status(400);
+    console.log(error);
     throw new Error("User not found");
   }
 };
@@ -78,7 +78,7 @@ export const loginUser = async (req: Request, res: Response) => {
 
   const user = await User.findOne({ email });
   if (!user) {
-    return res.json({
+    return res.status(400).json({
       message: "No user found with this email",
     });
   }
@@ -94,7 +94,6 @@ export const loginUser = async (req: Request, res: Response) => {
         name: user.name,
         email: user.email,
         isAdmin: user.isAdmin,
-        pic: user.pic,
         token: token,
       });
     } else {

@@ -42,7 +42,8 @@ const allUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.allUsers = allUsers;
 const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { name, email, password, pic } = req.body;
+        const { name, email, password } = req.body;
+        console.log(name, email, password);
         if (!name || !email || !password) {
             res.status(400);
             throw new Error("Please Enter all the Feilds");
@@ -56,8 +57,7 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         const user = yield User.create({
             name,
             email,
-            hashedPassword,
-            pic,
+            password: hashedPassword,
         });
         res
             .cookie("token", generateToken({ id: user._id.toString(), email: user.email }))
@@ -66,12 +66,12 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             name: user.name,
             email: user.email,
             isAdmin: user.isAdmin,
-            pic: user.pic,
             token: generateToken(user._id),
         });
     }
     catch (error) {
         res.status(400);
+        console.log(error);
         throw new Error("User not found");
     }
 });
@@ -80,7 +80,7 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
     const user = yield User.findOne({ email });
     if (!user) {
-        return res.json({
+        return res.status(400).json({
             message: "No user found with this email",
         });
     }
@@ -95,7 +95,6 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 name: user.name,
                 email: user.email,
                 isAdmin: user.isAdmin,
-                pic: user.pic,
                 token: token,
             });
         }
